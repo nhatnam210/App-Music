@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;900&display=swap');
 :root {
   --primary-color: #ffd11a;
+  --second-color:  #ff33ff;
+  --third-colr: #00fdfd;
   --background-song-color:  linear-gradient(45deg,#ffe680,#ffb3ff,#ffe680,#ffb3ff);
   --text-color: #333;
 }
@@ -53,17 +55,26 @@ body {
 
 header {
   text-align: center;
-  margin-bottom: 10px;
 }
 
 header h4 {
   color: var(--primary-color);
   font-size: 12px;
+  user-select: none;
 }
 
 header h2 {
   color: var(--text-color);
-  font-size: 20px;
+  font-size: 22px;
+  padding-top: 5px;
+}
+
+.singer h3{
+  text-align: center;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--second-color);
 }
 
 .cd {
@@ -71,9 +82,10 @@ header h2 {
   width: 200px;
   margin: auto; */
   display: block;
-  width: 200px;
+  width: 240px;
   margin: auto;
   position: relative;
+  padding: 10px;
 }
 
 .cd-thumb {
@@ -96,7 +108,7 @@ header h2 {
   border-radius: 50%;
   top: 50%;
   transform: translateY(-50%);
-  left: calc(50% - var(--width)/2);
+  left:0;
 }
 
 .cd-thumb-inner-1 {
@@ -128,6 +140,12 @@ header h2 {
   color: #666;
   padding: 18px;
   font-size: 18px;
+  cursor: pointer;
+}
+
+.control .btn:active {
+  color: var(--primary-color);
+  
 }
 
 .control .btn.active {
@@ -138,7 +156,7 @@ header h2 {
   width: 55px;
   height: 55px;
   /* background-color: var(--primary-color); */
-  background: linear-gradient(45deg,var(--primary-color),#ff66ff);
+  background: linear-gradient(45deg,var(--primary-color),var(--second-color));
 
   border-radius: 50%;
   color: #fff;
@@ -203,7 +221,7 @@ header h2 {
   padding: 12px;
   /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
   background: var(--background-song-color) ; 
-  margin-top: 395px;
+  margin-top: 458px;
 }
 .song,
 .song-wrap,
@@ -250,7 +268,7 @@ header h2 {
 
 .song::before,
 .song::after {
-    background: linear-gradient(45deg,#00fdfd,transparent,transparent,#ff66ff);
+    background: linear-gradient(45deg,var(--third-colr),transparent,transparent,var(--second-color));
 } 
 
 .song-wrap {
