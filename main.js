@@ -17,12 +17,15 @@ const header = $('header h2');
 const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
 const cd = $('.cd');
+const singer = $('.singer h3');
 const btnPlay = $('.btn-toggle-play')
 const player = $('.player')
 const progress = $('#progress')
 const btnPrev = $('.btn-prev')
 const btnNext = $('.btn-next')
 const btnRandom = $('.btn-random')
+const cdInnerThumb1 = $('.cd-thumb-inner-1');
+const cdInnerThumb2 = $('.cd-thumb-inner-2');
 
 const app = {
     currentIndex : 0,
@@ -65,6 +68,18 @@ const app = {
             path: './assets/music/Say My Name-ateez.mp3',
             image: './assets/img/say-my-name-ateez.jpg'
         },
+        {
+            name: 'Say My Name',
+            singer: 'ATEEZ',
+            path: './assets/music/Say My Name-ateez.mp3',
+            image: './assets/img/say-my-name-ateez.jpg'
+        },
+        {
+            name: 'Say My Name',
+            singer: 'ATEEZ',
+            path: './assets/music/Say My Name-ateez.mp3',
+            image: './assets/img/say-my-name-ateez.jpg'
+        },
     ],
     render() {
         const htmls = this.songs.map((song) => {
@@ -98,6 +113,17 @@ const app = {
     handleEvents() {
         const cdWidth = cd.offsetWidth
 
+        var CdWidthThumb1 = cdWidth / 4;
+        var CdWidthThumb2 = cdWidth / 6;
+
+        cdInnerThumb1.style.width = CdWidthThumb1+ 'px'
+        cdInnerThumb1.style.height = CdWidthThumb1 + 'px'
+        cdInnerThumb2.style.width = CdWidthThumb2 + 'px'
+        cdInnerThumb2.style.height = CdWidthThumb2 + 'px'
+
+        cdInnerThumb1.style.left = 'calc(50% - '+CdWidthThumb1+'px / 2)'
+        cdInnerThumb2.style.left = 'calc(50% - '+CdWidthThumb2+'px / 2)'
+
         const cdThumbAnimate = cdThumb.animate([
             { transform: 'rotate(360deg)'}
         ],{
@@ -112,10 +138,27 @@ const app = {
             const scrollTop = window.scrollY || document.documentElement.scrollTop;
             // left: calc(50% - var(--width)/2);
             const newCdWidth = cdWidth - scrollTop;
+
+           var newCdWidthThumb1 = newCdWidth / 4;
+           var newCdWidthThumb2 = newCdWidth / 6;
             
             const realWidth = newCdWidth > 0 ? newCdWidth : 0;
+            if(realWidth <= 20) {
+                cd.style.padding = realWidth/2 + 'px'
+            }else {
+                cd.style.padding = '10px'
+            }
             cd.style.width = realWidth + 'px';
             cd.style.opacity = newCdWidth / cdWidth;
+
+            cdInnerThumb1.style.width = newCdWidthThumb1+ 'px'
+            cdInnerThumb1.style.height = newCdWidthThumb1 + 'px'
+            cdInnerThumb2.style.width = newCdWidthThumb2 + 'px'
+            cdInnerThumb2.style.height = newCdWidthThumb2 + 'px'
+
+            cdInnerThumb1.style.left = 'calc(50% - '+newCdWidthThumb1+'px / 2)'
+            cdInnerThumb2.style.left = 'calc(50% - '+newCdWidthThumb2+'px / 2)'
+
 
         }
 
@@ -198,6 +241,7 @@ const app = {
         header.textContent = this.currentSong.name
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path
+        singer.textContent = this.currentSong.singer
     },
     nextSong() {
         this.currentIndex++;
