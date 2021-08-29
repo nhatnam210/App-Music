@@ -143,9 +143,13 @@ header h2 {
   cursor: pointer;
 }
 
-.control .btn:active {
+.btn:active {
   color: var(--primary-color);
   
+}
+
+.btn-toggle-play:active {
+  color: #fff;
 }
 
 .control .btn.active {
