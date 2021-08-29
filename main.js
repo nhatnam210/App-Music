@@ -54,7 +54,7 @@ const app = {
             name: 'Wonderland',
             singer: 'ATEEZ',
             path: './assets/music/wonderland-ateez.mp3',
-            image: './assets/img/wonderland-ateez.jpg_large'
+            image: './assets/img/wonderland-ateez.jpg'
         },
         {
             name: 'God Menu',
@@ -69,16 +69,16 @@ const app = {
             image: './assets/img/say-my-name-ateez.jpg'
         },
         {
-            name: 'Say My Name',
+            name: 'Hala Hala',
             singer: 'ATEEZ',
-            path: './assets/music/Say My Name-ateez.mp3',
-            image: './assets/img/say-my-name-ateez.jpg'
+            path: './assets/music/Hala hala - ateez.mp3',
+            image: './assets/img/Halahala-ateez.jpg'
         },
         {
-            name: 'Say My Name',
-            singer: 'ATEEZ',
-            path: './assets/music/Say My Name-ateez.mp3',
-            image: './assets/img/say-my-name-ateez.jpg'
+            name: 'Kit it x Thunderous',
+            singer: 'NCT 127 x Stray Kids',
+            path: './assets/music/kitit-thunderous-mashup.mp3',
+            image: './assets/img/kitit-thunderous.jpg'
         },
     ],
     render() {
