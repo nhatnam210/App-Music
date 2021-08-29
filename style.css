@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;900&display=swap');
 :root {
-  --primary-color: #ec1f55;
+  --primary-color: #ffd11a;
+  --background-song-color:  linear-gradient(45deg,#ffe680,#ffb3ff,#ffe680,#ffb3ff);
   --text-color: #333;
 }
+
 * {
   padding: 0;
   margin: 0;
@@ -17,20 +19,26 @@ body {
   font-family: 'Noto Sans JP', sans-serif;
   background-color: #eee;
 }
+
 .player {
   position: relative;
   max-width: 480px;
   margin: 0 auto;
+  -webkit-tap-highlight-color: transparent; 
 }
+
 .player .icon-pause {
   display: none;
 }
+
 .player.playing .icon-pause {
   display: inline-block;
 }
+
 .player.playing .icon-play {
   display: none;
 }
+
 .dashboard {
   padding: 16px 16px 14px;
   position: fixed;
@@ -39,11 +47,15 @@ body {
   max-width: 480px;
   background-color: #fff;
   border-bottom: 1px solid #ebebeb;
+  z-index: 5;
+  /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
 }
+
 header {
   text-align: center;
   margin-bottom: 10px;
 }
+
 header h4 {
   color: var(--primary-color);
   font-size: 12px;
@@ -53,17 +65,56 @@ header h2 {
   color: var(--text-color);
   font-size: 20px;
 }
+
 .cd {
+  /* display: block;
+  width: 200px;
+  margin: auto; */
   display: block;
   width: 200px;
   margin: auto;
+  position: relative;
 }
+
 .cd-thumb {
-  padding-top: 100%;
+  /* padding-top: 100%;
   border-radius: 50%;
   background-repeat: no-repeat;
   background-size: cover;
-    background-position: center;
+  background-position: center; */
+  border-radius: 50%;
+  padding-top: 100%;
+  background-repeat: no-repeat ;
+  background-position: center;
+  background-size: cover ;
+  position: relative;
+}
+.cd-thumb-inner-1,
+.cd-thumb-inner-2 {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(50% - var(--width)/2);
+}
+
+.cd-thumb-inner-1 {
+  --width: 45px;
+  width: var(--width);
+  height: var(--width);
+  background-color: rgba(255,255,255,0.35);
+  border: 1px solid var(--primary-color);
+  z-index: 5;
+}
+
+.cd-thumb-inner-2 {
+  --width: 30px;
+  width: var(--width);
+  height: var(--width);
+  background-color: #fff;
+  border: 1px solid transparent;
+  border: 1px solid #333;
 }
 
 .control {
@@ -72,6 +123,7 @@ header h2 {
   justify-content: space-around;
   padding: 20px 0 10px 0;
 }
+
 .control .btn {
   color: #666;
   padding: 18px;
@@ -85,19 +137,23 @@ header h2 {
 .control .btn-toggle-play {
   width: 55px;
   height: 55px;
-  background-color: var(--primary-color);
+  /* background-color: var(--primary-color); */
+  background: linear-gradient(45deg,var(--primary-color),#ff66ff);
+
   border-radius: 50%;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
-.btn-random.active,
-.btn-repeat.active {
+
+.btn-random.active, .btn-repeat.active {
   color: var(--primary-color);
 }
+
 .progress {
-  width: 100%;
+  /* width: 100%;
   overflow: hidden;
   -webkit-appearance: none;
   height: 6px;
@@ -105,45 +161,141 @@ header h2 {
   outline: none;
   opacity: 0.7;
   -webkit-transition: 0.2s;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s; */
+  width: 100%;
+  -webkit-appearance: none; /*Cái này phải none thì mới set background được*/
+  background: #d3d3d3;
+  height: 6px;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  overflow: hidden; /*Ẩn đi 1 phần cái nút tròn nên nhìn thấy nó ngang*/
+  transition: opacity .2s linear; 
 }
+
+.progress:hover {
+  opacity: 1;
+}
+
 .progress:hover::-webkit-slider-thumb {
   background: var(--primary-color);
   box-shadow: -500px 0 0 500px var(--primary-color);
 }
+
+/*cái nút kéo*/
 .progress::-webkit-slider-thumb {
-  -webkit-appearance: none;
+  /* -webkit-appearance: none;
   cursor: pointer;
   width: 12px;
-  height: 6px;
+  height: 6px; 
   background: var(--primary-color);
-  box-shadow: -500px 0 0 500px var(--primary-color);
+  box-shadow: -500px 0 0 500px var(--primary-color); */
+  -webkit-appearance: none;/*Cái này phải none thì mới set background được*/
+  background: var(--primary-color);
+  width: 12px;
+  height: 6px;
+  cursor: pointer;
+  box-shadow: -500px 0px 0px 500px  var(--primary-color);
+
 }
+
 .playlist {
   padding: 12px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
+  background: var(--background-song-color) ; 
   margin-top: 395px;
 }
+.song,
+.song-wrap,
+.song::before,
+.song::after {
+  border-radius: 5px;
+}
+
 .song {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
   background-color: #fff;
-  padding: 8px 16px;
-  border-radius: 5px;
-  box-shadow: 0 2px 3px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 3px rgb(0 0 0 / 40%);
+  cursor: pointer;
+  transition: all .2s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent; 
+  /* border: 1px solid var(--primary-color); */
 }
+
+.song:hover {
+  transform: scale(1.025);
+  /* box-shadow: 0 0 10px 3px var(--primary-color); */
+}
+
+.song::before,
+.song::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transition: ease .2s;
+
+}
+
+.song:hover::before{
+  inset: -3px;
+}
+
+.song:hover::after {
+  inset: -3px;
+  filter: blur(10px);
+}
+
+.song::before,
+.song::after {
+    background: linear-gradient(45deg,#00fdfd,transparent,transparent,#ff66ff);
+} 
+
+.song-wrap {
+  z-index:2;
+  padding: 8px 16px;
+  background-color: #fff;
+  position:relative; 
+  /*top: 0;
+  left: 0; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  /* border: .5px solid var(--primary-color); */
+}
+
+/* .song-wrap:hover {
+  border: transparent;
+} */
+
+.song-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -70%;
+  background-color: #faea0b28;
+  width: 100%;
+  height: 100%;
+  transform: skew(-25deg);
+}
+
 .song.active {
   background-color: var(--primary-color);
 }
+
 .song:active {
   opacity: 0.8;
 }
-.song.active .title,
-.song.active .author,
-.song.active .option {
+
+.song.active .title, .song.active .author, .song.active .option {
   color: #fff;
 }
+
 .song .thumb {
   width: 46px;
   height: 46px;
@@ -153,19 +305,23 @@ header h2 {
   border-radius: 50%;
   margin: 0 8px;
 }
+
 .song .body {
   flex: 1;
   padding: 0 16px;
 }
+
 .song .title {
   margin-bottom: 4px;
   font-size: 18px;
   color: var(--text-color);
 }
+
 .song .author {
   font-size: 12px;
   color: #999;
 }
+
 .song .option {
   padding: 16px 8px;
   color: #999;
