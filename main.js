@@ -75,7 +75,7 @@ const app = {
             image: './assets/img/Halahala-ateez.jpg'
         },
         {
-            name: 'Kit it x Thunderous',
+            name: 'Kit It x Thunderous',
             singer: 'NCT 127 x Stray Kids',
             path: './assets/music/kitit-thunderous-mashup.mp3',
             image: './assets/img/kitit-thunderous.jpg'
