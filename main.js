@@ -18,6 +18,7 @@ const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
 const cd = $('.cd');
 const singer = $('.singer h3');
+const title = $('header h2');
 const btnPlay = $('.btn-toggle-play')
 const player = $('.player')
 const progress = $('#progress')
@@ -29,7 +30,6 @@ const btnRepeat = $('.btn-repeat')
 const cdInnerThumb1 = $('.cd-thumb-inner-1');
 const cdInnerThumb2 = $('.cd-thumb-inner-2');
 const playlist = $('.playlist');
-
 
 const app = {
     currentIndex: 0,
@@ -158,12 +158,14 @@ const app = {
                 cd.style.borderWidth = realWidth / 4 + 'px'
                 singer.style.padding = realWidth / 2 + 'px'
 
-                if (realWidth / 2 <= 0) {
+                if (realWidth === 0) {
                     singer.style.color = 'var(--second-color)'
                     singer.style.letterSpacing = '4px'
+                    title.style.textShadow = '0px 0px 2px var(--second-dark-color)'
                 } else {
                     singer.style.letterSpacing = '2px'
                     singer.style.color = '#999'
+                    title.style.textShadow = '0px 0px 2px transparent'
                 }
             } else {
                 cd.style.padding = '5px'
@@ -171,7 +173,7 @@ const app = {
                 singer.style.letterSpacing = '2px'
                 singer.style.color = '#999'
                 singer.style.padding = '5px'
-
+                title.style.textShadow = '0px 0px 2px transparent'
             }
             cd.style.width = realWidth + 'px';
             cd.style.opacity = newCdWidth / cdWidth;
@@ -229,7 +231,6 @@ const app = {
         //Xử lý tăng giảm âm lượng
         volume.oninput = function () {
             audio.volume = volume.value;
-            console.log(volume.value);
         }
 
         //Khi next song 
