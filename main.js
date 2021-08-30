@@ -8,7 +8,7 @@
  * 7. Next/ Repeat when ended -----(Done)
  * 8. Active song -----(Done)
  * 9. Scroll active song into view -----(Done)
- * 10. Play song when click
+ * 10. Play song when click -----(Done)
  */
 
 const $ = document.querySelector.bind(document);
@@ -272,18 +272,19 @@ const app = {
             //Xử lý khi click vào đúng song
             const songNotActive = e.target.closest('.song-wrap:not(.active)');
             const option = e.target.closest('.option')
-
+            // console.log(e.target)
+            // console.log(songNotActive )
             if(songNotActive || option ) {
                 // console.log(e.target)
                 if(songNotActive && !option) {
-                    // console.log(songNotActive.getAttribute('data-index'))
-                    console.log(songNotActive.dataset.index)
+                    // console.log(songNotActive.getAttribute('data-index')) //C1
+                    // console.log(songNotActive.dataset.index) //C2
                     app.currentIndex = Number(songNotActive.dataset.index);
                     app.loadCurrentSong();
                     audio.play();
                     app.render();
                 }
-
+                //else vẫn được
                 if(option) {
                     console.log('Option')
                 }
