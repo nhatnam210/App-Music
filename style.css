@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;900&display=swap');
 :root {
   --primary-color: #ffd11a;
+  --primary-dark-color: #ff9c1a;
   --second-color:  #ff33ff;
+  --second-dark-color:  #db11db;
   --third-color: #00fdfd;
   --gray-color: #f2f2f2;
   --background-song-color:  linear-gradient(-45deg,#ffe680,#ffb3ff,#ffe680,#ffb3ff);
@@ -86,7 +88,6 @@ header h2 {
   display: block;
   width: 240px;
   margin: auto;
-  position: relative;
   padding: 5px;
   border:double var(--primary-color);
   border-width:  5px ;
@@ -135,7 +136,7 @@ header h2 {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 20px 0 10px 0;
+  padding: 30px 0 10px 0;
 }
 
 .control .btn {
@@ -176,6 +177,31 @@ header h2 {
   color: var(--primary-color);
 }
 
+.volume {
+  display: flex;
+  width: 40%;
+  margin: auto;
+  overflow: hidden;
+  -webkit-appearance: none; /*Cái này phải none thì mới set background được*/
+  background: #d3d3d3;
+  height: 8px;
+  outline: none;
+  /* padding-top: 5px; */
+  margin-top: 15px;
+  position: relative;
+  border-radius: 50px;
+}
+
+.volume::-webkit-slider-thumb {
+  -webkit-appearance: none;/*Cái này phải none thì mới set background được*/
+  background: linear-gradient(-90deg,var(--second-color),var(--second-dark-color));
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+  box-shadow: -500px 50px 0px 500px  var(--second-color);
+  border-radius: 50px;
+}
+
 .progress {
   /* width: 100%;
   overflow: hidden;
@@ -189,21 +215,18 @@ header h2 {
   width: 100%;
   -webkit-appearance: none; /*Cái này phải none thì mới set background được*/
   background: #d3d3d3;
-  height: 6px;
+  height: 8px;
   outline: none;
   opacity: 0.7;
   -webkit-transition: 0.2s;
-  overflow: hidden; /*Ẩn đi 1 phần cái nút tròn nên nhìn thấy nó ngang*/
+  /*Ẩn đi 1 phần cái nút tròn nên nhìn thấy nó ngang*/
+  overflow: hidden; 
   transition: opacity .2s linear; 
+  border-radius: 50px;
 }
 
 .progress:hover {
   opacity: 1;
-}
-
-.progress:hover::-webkit-slider-thumb {
-  background: var(--primary-color);
-  box-shadow: -500px 0 0 500px var(--primary-color);
 }
 
 /*cái nút kéo*/
@@ -214,14 +237,19 @@ header h2 {
   height: 6px; 
   background: var(--primary-color);
   box-shadow: -500px 0 0 500px var(--primary-color); */
-  -webkit-appearance: none;/*Cái này phải none thì mới set background được*/
-  background: var(--primary-color);
-  width: 12px;
-  height: 6px;
+  -webkit-appearance: none;/*Cái này phải none thì mới set background được abc*/
+  background: linear-gradient(90deg,var(--primary-color),var(--primary-dark-color));
+  width: 8px;
+  height: 8px;
   cursor: pointer;
-  box-shadow: -500px 0px 0px 500px  var(--primary-color);
-
+  box-shadow: -500px 50px 0px 500px  var(--primary-color);
+  border-radius: 50%;
 }
+/* 
+.progress:hover::-webkit-slider-thumb {
+  background: var(--primary-color);
+  box-shadow: -500px 0 0 500px var(--primary-color);
+} */
 
 .playlist {
   padding: 12px;
