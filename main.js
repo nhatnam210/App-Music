@@ -9,10 +9,14 @@
  * 8. Active song -----(Done)
  * 9. Scroll active song into view -----(Done)
  * 10. Play song when click -----(Done)
+ * 11. Bonus lưu cấu hình
  */
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+
+const PLAYER_STORAGE_KEY = 'NAW_PLAYER'
+
 const header = $('header h2');
 const cdThumb = $('.cd-thumb');
 const audio = $('#audio');
@@ -23,6 +27,7 @@ const btnPlay = $('.btn-toggle-play')
 const player = $('.player')
 const progress = $('#progress')
 const volume = $('#volume')
+const btnVolume = $('.btn-toggle-volume')
 const btnPrev = $('.btn-prev')
 const btnNext = $('.btn-next')
 const btnRandom = $('.btn-random')
@@ -36,8 +41,10 @@ const app = {
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
+    isMute : false,
     countSong: 0,
     arrayRandomSongIndex: [],
+    config : JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {}, //Mặc định không có thì lấy Object rỗng
     songs: [
         {
             name: 'Advice',
@@ -94,6 +101,11 @@ const app = {
             image: './assets/img/inception-ateez.jpg'
         },
     ],
+    setConfig(key, value) {
+        this.config[key] = value;
+        //lưu object có key và value vừa tạo vào localStorage
+        localStorage.setItem(PLAYER_STORAGE_KEY,JSON.stringify(this.config))
+    },
     render() {
         const htmls = this.songs.map((song, index) => {
             return `
@@ -135,17 +147,7 @@ const app = {
         cdInnerThumb2.style.height = CdWidthThumb2 + 'px'
 
         cdInnerThumb1.style.left = 'calc(50% - ' + CdWidthThumb1 + 'px / 2)'
-        cdInnerThumb2.style.left = 'calc(50% - ' + CdWidthThumb2 + 'px / 2)'
-
-        //Xử lý xoay cd
-        const cdThumbAnimate = cdThumb.animate([
-            { transform: 'rotate(360deg)' }
-        ], {
-            duration: 10000, //10s
-            iterations: Infinity,
-        }) // Trả vê một đối tượng animate
-
-        cdThumbAnimate.pause()
+        cdInnerThumb2.style.left = 'calc(50% - ' + CdWidthThumb2 + 'px / 2)'     
 
         //Xử lý thu phóng Cd khi cuộn
         document.onscroll = function () {
@@ -199,6 +201,16 @@ const app = {
             }
         }
 
+        //Xử lý xoay cd
+        const cdThumbAnimate = cdThumb.animate([
+            { transform: 'rotate(360deg)' }
+        ], {
+            duration: 10000, //10s
+            iterations: Infinity,
+        }) // Trả vê một đối tượng animate
+
+        cdThumbAnimate.pause()
+
         //Khi song được click play
         audio.onplay = function () {
             app.isPlaying = true;
@@ -228,10 +240,32 @@ const app = {
             audio.currentTime = seekTime;
         }
 
+        var volumeRage = 1;
         //Xử lý tăng giảm âm lượng
         volume.oninput = function () {
-            audio.volume = volume.value;
+            volumeRage = volume.value;
+            audio.volume = volumeRage;
+
+            if(volumeRage == 0)  
+                app.isMute = true
+            else app.isMute = false
+            btnVolume.classList.toggle('going-up',!app.isMute)
         }
+
+        //Xử lý tắt/mở âm thanh
+        btnVolume.onclick = function () {
+            app.isMute = !app.isMute
+            btnVolume.classList.toggle('going-up',!app.isMute)
+            if(app.isMute) {
+                volume.value = 0;
+                audio.volume = volume.value;
+            }else {
+                volume.value = volumeRage;
+                audio.volume = volume.value;              
+            }
+        }
+
+        //Xử lý thay đổi trang thái âm lượng và nút âm lượng
 
         //Khi next song 
         btnNext.onclick = function () {
@@ -261,12 +295,16 @@ const app = {
         btnRandom.onclick = function () {
             app.isRandom = !app.isRandom;
             this.classList.toggle('active', app.isRandom) // ko cần cũng được
+
+            app.setConfig('isRandom',app.isRandom)
         }
 
         //Xử lý bật tắt Repeat
         btnRepeat.onclick = function () {
             app.isRepeat = !app.isRepeat;
-            this.classList.toggle('active')
+            this.classList.toggle('active', app.isRepeat)
+            
+            app.setConfig('isRepeat',app.isRepeat)
         }
 
         //Xử lý next song khi audio ended
@@ -310,6 +348,14 @@ const app = {
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path
         singer.textContent = this.currentSong.singer
+    },
+    loadConfig() {
+        this.isRandom = this.config.isRandom;
+        this.isRepeat = this.config.isRepeat;
+        
+        //Hiển thị trạng thái ban đầu của btnRandom và btnRepeat
+        btnRandom.classList.toggle('active',this.isRandom)
+        btnRepeat.classList.toggle('active',this.isRepeat)
     },
     nextSong() {
         this.currentIndex++;
@@ -360,9 +406,6 @@ const app = {
             }
         }, 300)
     },
-    // repeatSong() {
-    //     this.loadCurrentSong();
-    // },
     start() {
         //Định nghĩa các thuộc tính cho Object
         this.defineProperties()
@@ -370,8 +413,12 @@ const app = {
         //Lắng nghe/ xử lý các sự kiện (DOM Events)
         this.handleEvents()
 
-        //Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
+        //Load thông tin bài hát đầu tiên khi chạy ứng dụng
         this.loadCurrentSong()
+
+        //Load thông tin cấu hình khi chạy ứng dụng
+        //Gán cấu hình từ config vào ứng dụng
+        this.loadConfig() 
 
         //Render playlist
         this.render()
@@ -379,4 +426,3 @@ const app = {
 }
 
 app.start()
-console.log(app)

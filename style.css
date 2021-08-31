@@ -138,7 +138,7 @@ header h2 {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 30px 0 10px 0;
+  padding: 10px 0 10px 0;
 }
 
 .control .btn {
@@ -178,17 +178,25 @@ header h2 {
   color: var(--primary-color);
 }
 
-.volume {
+.control-volume {
+  position: relative;
+}
+
+.control-volume-wrap {
+  width: 50%;
+  margin-left: 50%;
+  transform: translateX(-58%);
   display: flex;
-  width: 40%;
+}
+
+.volume {
+  flex: 1;
   margin: auto;
   -webkit-appearance: none; /*Cái này phải none thì mới set background được*/
   background: #d3d3d3;
   height: 8px;
   outline: none;
-  /* padding-top: 5px; */
-  margin-top: 15px;
-  position: relative;
+  /* position: relative; */
   border-radius: 50px;
   overflow: hidden;
 }
@@ -201,6 +209,43 @@ header h2 {
   cursor: pointer;
   box-shadow: -504px 0px 0px 500px  var(--second-color);
   border-radius: 50px;
+}
+
+.control-volume {
+  /* position: relative; */
+}
+
+.btn-toggle-volume {
+  width: 40px;
+  height: 40px;
+  color: #666;
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-toggle-volume .icon-volume-up,
+.btn-toggle-volume .icon-volume-mute {
+  position: absolute;
+  left: 8px;
+}
+
+.btn-toggle-volume .icon-volume-up {
+  display: none;
+}
+
+.btn-toggle-volume.going-up .icon-volume-up {
+  display: flex;
+}
+
+.btn-toggle-volume.going-up .icon-volume-mute {
+  display: none;
+}
+
+.btn-toggle-volume:active {
+  color: #444444;
 }
 
 .progress {
