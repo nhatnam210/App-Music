@@ -35,16 +35,18 @@ const btnRepeat = $('.btn-repeat')
 const cdInnerThumb1 = $('.cd-thumb-inner-1');
 const cdInnerThumb2 = $('.cd-thumb-inner-2');
 const playlist = $('.playlist');
+const currentTime = $('.current-time');
+// const totalTime = $('.total-time');
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
-    isMute : false,
+    isMute: false,
     countSong: 0,
     arrayRandomSongIndex: [],
-    config : JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {}, //Mặc định không có thì lấy Object rỗng
+    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {}, //Mặc định không có thì lấy Object rỗng
     songs: [
         {
             name: 'Advice',
@@ -104,7 +106,7 @@ const app = {
     setConfig(key, value) {
         this.config[key] = value;
         //lưu object có key và value vừa tạo vào localStorage
-        localStorage.setItem(PLAYER_STORAGE_KEY,JSON.stringify(this.config))
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
     },
     render() {
         const htmls = this.songs.map((song, index) => {
@@ -136,6 +138,7 @@ const app = {
         })
     },
     handleEvents() {
+        //Các giá trị mặc định ban đầu
         const cdWidth = cd.offsetWidth
 
         const CdWidthThumb1 = cdWidth / 4;
@@ -147,7 +150,7 @@ const app = {
         cdInnerThumb2.style.height = CdWidthThumb2 + 'px'
 
         cdInnerThumb1.style.left = 'calc(50% - ' + CdWidthThumb1 + 'px / 2)'
-        cdInnerThumb2.style.left = 'calc(50% - ' + CdWidthThumb2 + 'px / 2)'     
+        cdInnerThumb2.style.left = 'calc(50% - ' + CdWidthThumb2 + 'px / 2)'
 
         //Xử lý thu phóng Cd khi cuộn
         document.onscroll = function () {
@@ -201,71 +204,28 @@ const app = {
             }
         }
 
-        //Xử lý xoay cd
+        //Xử lý animate xoay cd
         const cdThumbAnimate = cdThumb.animate([
             { transform: 'rotate(360deg)' }
         ], {
             duration: 10000, //10s
             iterations: Infinity,
         }) // Trả vê một đối tượng animate
-
         cdThumbAnimate.pause()
 
-        //Khi song được click play
+        //Xử lý UI khi song được click play
         audio.onplay = function () {
             app.isPlaying = true;
             player.classList.add('playing')
             cdThumbAnimate.play()
         }
 
-        // console.log(cdThumbAnimate)
-
-        //Khi song được click pause
+        //Xử lý UI khi song được click pause
         audio.onpause = function () {
             app.isPlaying = false;
             player.classList.remove('playing')
             cdThumbAnimate.pause()
-
         }
-
-        //Khi tiến độ bài hát hay đổi
-        audio.ontimeupdate = function () {
-            const progressPercent = audio.currentTime / audio.duration * 100;
-            progress.value = progressPercent;
-        }
-
-        //Xử lý khi tua
-        progress.oninput = function () {
-            const seekTime = progress.value * audio.duration / 100;
-            audio.currentTime = seekTime;
-        }
-
-        var volumeRage = 1;
-        //Xử lý tăng giảm âm lượng
-        volume.oninput = function () {
-            volumeRage = volume.value;
-            audio.volume = volumeRage;
-
-            if(volumeRage == 0)  
-                app.isMute = true
-            else app.isMute = false
-            btnVolume.classList.toggle('going-up',!app.isMute)
-        }
-
-        //Xử lý tắt/mở âm thanh
-        btnVolume.onclick = function () {
-            app.isMute = !app.isMute
-            btnVolume.classList.toggle('going-up',!app.isMute)
-            if(app.isMute) {
-                volume.value = 0;
-                audio.volume = volume.value;
-            }else {
-                volume.value = volumeRage;
-                audio.volume = volume.value;              
-            }
-        }
-
-        //Xử lý thay đổi trang thái âm lượng và nút âm lượng
 
         //Khi next song 
         btnNext.onclick = function () {
@@ -296,15 +256,58 @@ const app = {
             app.isRandom = !app.isRandom;
             this.classList.toggle('active', app.isRandom) // ko cần cũng được
 
-            app.setConfig('isRandom',app.isRandom)
+            app.setConfig('isRandom', app.isRandom)
         }
 
         //Xử lý bật tắt Repeat
         btnRepeat.onclick = function () {
             app.isRepeat = !app.isRepeat;
             this.classList.toggle('active', app.isRepeat)
-            
-            app.setConfig('isRepeat',app.isRepeat)
+
+            app.setConfig('isRepeat', app.isRepeat)
+        }
+
+        //Khi tiến độ bài hát hay đổi
+        audio.ontimeupdate = function () {
+            const progressPercent = audio.currentTime / audio.duration * 100;
+            progress.value = progressPercent;
+
+            var total = app.changeToTime(Math.floor(audio.duration));
+            // totalTime.textContent = total === 'NaN:NaN:NaN' ? '00:00' : total;
+
+            var totalBehind = total === 'NaN:NaN:NaN' ? '00:00' : total;
+            currentTime.textContent = app.changeToTime(Math.floor(audio.currentTime)) + ` / ${totalBehind}`
+        }
+
+        //Xử lý khi tua
+        progress.oninput = function () {
+            const seekTime = progress.value * audio.duration / 100;
+            audio.currentTime = seekTime;
+        }
+
+        var volumeRage = 1;
+        //Xử lý tăng giảm âm lượng
+        volume.oninput = function () {
+            volumeRage = volume.value;
+            audio.volume = volumeRage;
+
+            if (volumeRage == 0)
+                app.isMute = true
+            else app.isMute = false
+            btnVolume.classList.toggle('going-up', !app.isMute)
+        }
+
+        //Xử lý tắt/mở âm thanh
+        btnVolume.onclick = function () {
+            app.isMute = !app.isMute
+            btnVolume.classList.toggle('going-up', !app.isMute)
+            if (app.isMute) {
+                volume.value = 0;
+                audio.volume = volume.value;
+            } else {
+                volume.value = volumeRage;
+                audio.volume = volume.value;
+            }
         }
 
         //Xử lý next song khi audio ended
@@ -352,10 +355,10 @@ const app = {
     loadConfig() {
         this.isRandom = this.config.isRandom;
         this.isRepeat = this.config.isRepeat;
-        
+
         //Hiển thị trạng thái ban đầu của btnRandom và btnRepeat
-        btnRandom.classList.toggle('active',this.isRandom)
-        btnRepeat.classList.toggle('active',this.isRepeat)
+        btnRandom.classList.toggle('active', this.isRandom)
+        btnRepeat.classList.toggle('active', this.isRepeat)
     },
     nextSong() {
         this.currentIndex++;
@@ -389,7 +392,6 @@ const app = {
             this.arrayRandomSongIndex = [];
             this.countSong = 0;
         }
-
     },
     scrollToActiveSong() {
         setTimeout(() => {
@@ -406,6 +408,17 @@ const app = {
             }
         }, 300)
     },
+    changeToTime(secs) {
+        var sec_num = parseInt(secs, 10)
+        var hours = Math.floor(sec_num / 3600)
+        var minutes = Math.floor(sec_num / 60) % 60
+        var seconds = sec_num % 60
+
+        return [hours, minutes, seconds]
+            .map(v => v < 10 ? "0" + v : v)
+            .filter((v, i) => v !== "00" || i > 0)
+            .join(":")
+    },
     start() {
         //Định nghĩa các thuộc tính cho Object
         this.defineProperties()
@@ -418,7 +431,7 @@ const app = {
 
         //Load thông tin cấu hình khi chạy ứng dụng
         //Gán cấu hình từ config vào ứng dụng
-        this.loadConfig() 
+        this.loadConfig()
 
         //Render playlist
         this.render()

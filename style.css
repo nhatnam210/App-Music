@@ -301,7 +301,7 @@ header h2 {
   padding: 12px;
   /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
   background: var(--background-song-color) ; 
-  margin-top: 496px;
+  margin-top: 515px;
 }
 .song,
 .song-wrap,
@@ -448,4 +448,21 @@ header h2 {
   font-size: 18px;
   z-index: 10;
   color:#333;
+}
+
+.time {
+  display: flex;
+  color: var(--text-color);
+  font-size: 12px;
+  justify-content: space-between;
+  font-weight: 500;
+  float: right;
+  padding-bottom: 5px;
+}
+
+.current-time,
+.total-time {
+  background-color: var(--primary-color);
+  border-radius: 50px;
+  padding:0 5px;
 }
